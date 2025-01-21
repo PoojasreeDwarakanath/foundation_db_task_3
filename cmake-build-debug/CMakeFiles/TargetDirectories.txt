@@ -1,3 +1,0 @@
-/home/pooja/CLionProjects/foundation_db_task_3/cmake-build-debug/CMakeFiles/Task3.dir
-/home/pooja/CLionProjects/foundation_db_task_3/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/pooja/CLionProjects/foundation_db_task_3/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -37,11 +37,11 @@ void* T2(void* arg) {
     const char* value;
 
     key = "k4";
-    value = "v4";
+    value = "v4_t2";
     fdb_transaction_set(tr, (uint8_t*)key, strlen(key), (uint8_t*)value, strlen(value));
 
-    key = "aa";
-    value = "aa_new";
+    key = "k2";
+    value = "v2_t2";
     fdb_transaction_set(tr, (uint8_t*)key, strlen(key), (uint8_t*)value, strlen(value));
 
     // Commit transaction
@@ -72,7 +72,7 @@ void* T1(void* arg) {
     const uint8_t* value;
     int value_length;
 
-    key = "key1";
+    key = "k1";
     f = fdb_transaction_get(tr, (uint8_t*)key, strlen(key), 0);
     err = fdb_future_block_until_ready(f);
     check_error(err, "Getting value in T1");
@@ -85,7 +85,7 @@ void* T1(void* arg) {
         printf("T1: Key not found\n");
     }
 
-    key = "aa";
+    key = "k2";
     f = fdb_transaction_get(tr, (uint8_t*)key, strlen(key), 0);
     err = fdb_future_block_until_ready(f);
     check_error(err, "Getting value in T1");
@@ -98,7 +98,7 @@ void* T1(void* arg) {
         printf("T1: Key not found\n");
     }
 
-    key = "a";
+    key = "k3";
     f = fdb_transaction_get(tr, (uint8_t*)key, strlen(key), 0);
     err = fdb_future_block_until_ready(f);
     check_error(err, "Getting value in T1");

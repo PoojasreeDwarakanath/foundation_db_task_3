@@ -69,61 +69,18 @@ int main() {
                                                    end_key, 1, 0, 1,
                                                    0, 0, FDB_STREAMING_MODE_WANT_ALL, 0, 0, 0);
 
-
-    err = fdb_future_block_until_ready(f_range);
-    if (err) {
-        fprintf(stderr, "Error waiting for getRange: %s\n", fdb_get_error(err));
-        return 1;
-    }
-
-    err = fdb_future_get_keyvalue_array(f_range, &kv, &count, &more);
-    if (err) {
-        fprintf(stderr, "Error getting key-value array: %s\n", fdb_get_error(err));
-        return 1;
-    }
-
-    end = clock();
-    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("Response time for get range WANTALL mode: %f seconds\n", cpu_time_used);
-
-    printf("Range results:\n");
-    for (int i = 0; i < count; i++) {
-        printf("Key: %.*s, Value: %.*s\n",
-               (int)kv[i].key_length, kv[i].key,
-               (int)kv[i].value_length, kv[i].value);
-    }
-
-    // ITERATOR mode
-    start = clock();
+	// ITERATOR mode
     f_range = fdb_transaction_get_range(tr_get_range,
-                                                   begin_key, 1, 0, 1,
-                                                   end_key, 1, 0, 1,
-                                                   0, 0, FDB_STREAMING_MODE_ITERATOR, 1, 0, 0);
-
-
-    err = fdb_future_block_until_ready(f_range);
-    if (err) {
-        fprintf(stderr, "Error waiting for getRange: %s\n", fdb_get_error(err));
-        return 1;
-    }
-
-    err = fdb_future_get_keyvalue_array(f_range, &kv, &count, &more);
-    if (err) {
-        fprintf(stderr, "Error getting key-value array: %s\n", fdb_get_error(err));
-        return 1;
-    }
-
-    end = clock();
-    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("Response time for get range ITERATOR mode: %f seconds\n", cpu_time_used);
-
+                                               begin_key, 1, 0, 1,
+                                               end_key, 1, 0, 1,
+                                               0, 0, FDB_STREAMING_MODE_ITERATOR, 1, 0, 0);
 
     // EXACT mode
-    start = clock();
     f_range = fdb_transaction_get_range(tr_get_range,
-                                                   begin_key, 1, 0, 1,
-                                                   end_key, 1, 0, 1,
-                                                   10, 0, FDB_STREAMING_MODE_EXACT, 0, 0, 0);
+                                               begin_key, 1, 0, 1,
+                                               end_key, 1, 0, 1,
+                                               10, 0, FDB_STREAMING_MODE_EXACT, 0, 0, 0);
+
 
 
     err = fdb_future_block_until_ready(f_range);
@@ -139,9 +96,16 @@ int main() {
     }
 
     end = clock();
-    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("Response time for get range EXACT mode: %f seconds\n", cpu_time_used);
+    cpu_time_used = ((double) (end - start)) * 1000 / CLOCKS_PER_SEC;
+    printf("Response time for get range %f milliseconds\n", cpu_time_used);
 
+//    Uncomment to print the values
+//    printf("Range results:\n");
+//    for (int i = 0; i < count; i++) {
+//        printf("Key: %.*s, Value: %.*s\n",
+//               (int)kv[i].key_length, kv[i].key,
+//               (int)kv[i].value_length, kv[i].value);
+//    }
 
     fdb_future_destroy(f_range);
     fdb_transaction_destroy(tr_get_range);
